@@ -1,16 +1,23 @@
 import argparse
 import logging
+import os
+from dotenv import load_dotenv
 
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
+
+load_dotenv()
+
+CLIENT_ID = os.getenv('CLIENT_ID')
+CLIENT_SECRET = os.getenv('CLIENT_SECRET')
 
 logger = logging.getLogger('examples.artist_albums')
 logging.basicConfig(level='INFO')
 
 ''' sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials()) '''
 
-sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id="75c5f3366cc547688ddf79b456e769f9",
-                                                           client_secret="b99a407fa5c5492bb9499dc77469f229"))
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=CLIENT_ID,
+                                                           client_secret=CLIENT_SECRET))
 
 
 def get_args():
