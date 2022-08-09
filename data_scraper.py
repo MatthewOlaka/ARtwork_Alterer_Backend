@@ -1,7 +1,10 @@
 import argparse
 import logging
 import os
+from unicodedata import name
 from dotenv import load_dotenv
+import sys
+import pprint
 
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
@@ -31,7 +34,9 @@ def get_artist(name):
     results = sp.search(q='artist:' + name, type='artist')
     items = results['artists']['items']
     if len(items) > 0:
+        print(items[0]['id'])
         return items[0]
+        
     else:
         return None
 
@@ -53,13 +58,48 @@ def show_artist_albums(artist):
 
 
 def main():
-    args = get_args()
+    ''' args = get_args()
     artist = get_artist(args.artist)
+    print('spotify:artist:' + artist["id"])
     if artist:
         show_artist_albums(artist)
     else:
-        logger.error("Can't find artist: %s", artist)
+        logger.error("Can't find artist: %s", artist) '''
 
+    ''' artist = get_artist(sys.argv[1])
+    artist_id = 'spotify:artist:' + artist["id"]
+
+   
+    response = sp.artist_top_tracks(artist_id)
+
+    for track in response['tracks']:
+        print(track['name']) '''
+    
+    ''' result = sp.search(q='album: sideline story artist: j cole', type='album', limit='1') '''
+    ''' val = sys.argv[1:len(sys.argv)] '''
+    val1 = input ("Enter Album Name :")
+    val2 = input ("Enter Artist Name :")
+    result = sp.search(q='album: '+ str(val1) + ' artist: ' + val2, type='album', limit='1')
+    album_artist = result['albums']['items'][0]['artists'][0]['name']
+    pprint.pprint(result)
+
+    result2 = sp.search(q='artist: ' + album_artist, type='artist', limit='1')
+    pprint.pprint(result2)
+
+
+    album = sp.album('spotify:album:37dn4xzwTrFIcD6pCCuAAM')
+    ''' pprint.pprint(album) '''
+
+
+''' client_credentials_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+if len(sys.argv) > 1:
+    artist_name = ' '.join(sys.argv[1:])
+    results = sp.search(q=artist_name, limit=20)
+    for i, t in enumerate(results['tracks']['items']):
+        print(' ', i, t['name'])
+ '''
 
 if __name__ == '__main__':
     main()
