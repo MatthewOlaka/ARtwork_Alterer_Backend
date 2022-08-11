@@ -97,12 +97,21 @@ def main():
 
 
     album_info = sp.album(album_uri)
-    pprint.pprint(album_info['tracks']['items'][4])
+    pprint.pprint(album_info['tracks']['items'])
+
+    m = 0
 
     for i in album_info['tracks']['items']:
+        
         print("Track Number: ", i['track_number'])
         print("Track Name: ", i['name'])
+        
+        for j in album_info['tracks']['items'][m]['artists']:
+            print("artists involved:", j['name'])
+            
+        #print("artists involved:", i['artists'][0]['name'])
         print()
+        m+=1
 
 
 ''' client_credentials_manager = SpotifyClientCredentials()
