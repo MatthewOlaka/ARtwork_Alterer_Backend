@@ -75,20 +75,34 @@ def main():
     for track in response['tracks']:
         print(track['name']) '''
     
-    ''' result = sp.search(q='album: sideline story artist: j cole', type='album', limit='1') '''
+    '''  '''
     ''' val = sys.argv[1:len(sys.argv)] '''
-    val1 = input ("Enter Album Name :")
+    ##############################################
+    ''' val1 = input ("Enter Album Name :")
     val2 = input ("Enter Artist Name :")
-    result = sp.search(q='album: '+ str(val1) + ' artist: ' + val2, type='album', limit='1')
+    result = sp.search(q='album: '+ str(val1) + ' artist: ' + val2, type='album', limit='1') '''
+    ###############################################
+    result = sp.search(q='album: '+str(sys.argv[1:]), type='album', limit='1')
+
+
     album_artist = result['albums']['items'][0]['artists'][0]['name']
-    pprint.pprint(result)
+    
+    album_uri = result['albums']['items'][0]['uri']
+
+    pprint.pprint(album_uri);
+    
 
     result2 = sp.search(q='artist: ' + album_artist, type='artist', limit='1')
     pprint.pprint(result2)
 
 
-    album = sp.album('spotify:album:37dn4xzwTrFIcD6pCCuAAM')
-    ''' pprint.pprint(album) '''
+    album_info = sp.album(album_uri)
+    pprint.pprint(album_info['tracks']['items'][4])
+
+    for i in album_info['tracks']['items']:
+        print("Track Number: ", i['track_number'])
+        print("Track Name: ", i['name'])
+        print()
 
 
 ''' client_credentials_manager = SpotifyClientCredentials()
