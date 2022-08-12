@@ -22,6 +22,8 @@ logging.basicConfig(level='INFO')
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=CLIENT_ID,
                                                            client_secret=CLIENT_SECRET))
 
+                                        
+
 
 def get_args():
     parser = argparse.ArgumentParser(description='Gets albums from artist')
@@ -56,27 +58,7 @@ def show_artist_albums(artist):
             logger.info('ALBUM: %s', name)
             seen.add(name)
 
-
-def main():
-    ''' args = get_args()
-    artist = get_artist(args.artist)
-    print('spotify:artist:' + artist["id"])
-    if artist:
-        show_artist_albums(artist)
-    else:
-        logger.error("Can't find artist: %s", artist) '''
-
-    ''' artist = get_artist(sys.argv[1])
-    artist_id = 'spotify:artist:' + artist["id"]
-
-   
-    response = sp.artist_top_tracks(artist_id)
-
-    for track in response['tracks']:
-        print(track['name']) '''
-    
-    '''  '''
-    ''' val = sys.argv[1:len(sys.argv)] '''
+def fetch_spotify_info():
     ##############################################
     ''' val1 = input ("Enter Album Name :")
     val2 = input ("Enter Artist Name :")
@@ -84,20 +66,58 @@ def main():
     ###############################################
     result = sp.search(q='album: '+str(sys.argv[1:]), type='album', limit='1')
 
+    ##  Getting Album 'id' from search results
 
-    album_artist = result['albums']['items'][0]['artists'][0]['name']
-    
     album_uri = result['albums']['items'][0]['uri']
-
     pprint.pprint(album_uri);
     
+    #########   Getting artist info   ###############
 
+    album_artist = result['albums']['items'][0]['artists'][0]['name']
     result2 = sp.search(q='artist: ' + album_artist, type='artist', limit='1')
     pprint.pprint(result2)
 
+    print("Artist Info")
+    print()
+
+    print(result2['artists']['items'][0]['images'][1]['url'])
+    print(result2['artists']['items'][0]['name'])
+
+
+    #########   Getting Album info   ###############
+
+    ##  General info
 
     album_info = sp.album(album_uri)
-    pprint.pprint(album_info['tracks']['items'])
+    #pprint.pprint(album_info)
+    #pprint.pprint(album_info['tracks']['items'])
+
+    print()
+    print()
+    print("Album INFO")
+    print()
+
+    print(album_info['name'])
+    print(album_info['album_type'])
+    print(album_info['label'])
+    print(album_info['release_date'])
+    print(album_info['total_tracks'])
+    print(album_info['popularity'])
+    popularity = album_info['popularity']
+   
+    show_popularity(popularity)
+
+    
+    
+
+    print()
+    print()
+
+
+    ##  Getting track info  
+
+    print("TRACK INFO")
+    print()
 
     m = 0
 
@@ -113,16 +133,27 @@ def main():
         print()
         m+=1
 
+def show_popularity(popularity):
+    print()
+    print("  POPULARITY RATING: ", popularity)
+    print()
+    if popularity < 20:
+        print("*")
+    elif popularity > 19 and popularity < 40:
+        print("* *")
+    elif popularity > 39 and popularity < 60:
+        print("* * *")
+    elif popularity > 59 and popularity < 80:
+        print("* * * *")
+    elif popularity > 79 and popularity < 100:
+        print("* * * * *")
+    
+        
 
-''' client_credentials_manager = SpotifyClientCredentials()
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-if len(sys.argv) > 1:
-    artist_name = ' '.join(sys.argv[1:])
-    results = sp.search(q=artist_name, limit=20)
-    for i, t in enumerate(results['tracks']['items']):
-        print(' ', i, t['name'])
- '''
+def main():
+    fetch_spotify_info()
+    
 
 if __name__ == '__main__':
     main()
