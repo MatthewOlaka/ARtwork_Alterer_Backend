@@ -5,13 +5,20 @@ from unicodedata import name
 from dotenv import load_dotenv
 import sys
 import pprint
+from PIL import Image, ImageDraw, ImageFont
+from colorthief import ColorThief
+import math
+import numpy as np
+
 
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
+import urllib.request
+
 
 load_dotenv()
 
-CLIENT_ID = os.getenv('CLIENT_ID')
+CLIENT_ID = os.getenv('CLIENT_ID') 
 CLIENT_SECRET = os.getenv('CLIENT_SECRET')
 
 logger = logging.getLogger('examples.artist_albums')
@@ -23,6 +30,13 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=CLIENT_ID,
                                                            client_secret=CLIENT_SECRET))
 
                                         
+def isLightOrDark(rgbColor=[175,203,211]):
+    [r,g,b]=rgbColor
+    hsp = math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b))
+    if (hsp>127.5):
+        print( 'light')
+    else:
+        print( 'dark' )
 
 
 def get_args():
@@ -58,6 +72,8 @@ def show_artist_albums(artist):
             logger.info('ALBUM: %s', name)
             seen.add(name)
 
+
+
 def fetch_spotify_info():
     ##############################################
     ''' val1 = input ("Enter Album Name :")
@@ -79,6 +95,9 @@ def fetch_spotify_info():
 
     print("Artist Info")
     print()
+
+    artist_name = result2['artists']['items'][0]['name']
+    artist_img_url = result2['artists']['items'][0]['images'][1]['url']
 
     print(result2['artists']['items'][0]['images'][1]['url'])
     print(result2['artists']['items'][0]['name'])
@@ -106,10 +125,6 @@ def fetch_spotify_info():
     popularity = album_info['popularity']
    
     show_popularity(popularity)
-
-    
-    
-
     print()
     print()
 
@@ -133,6 +148,47 @@ def fetch_spotify_info():
         print()
         m+=1
 
+    
+    # Creating the Image
+
+    make_image(artist_name, artist_img_url)
+
+def make_image(artist_name, artist_url):
+
+    #font = ImageFont.load("arial.pil")
+
+    urllib.request.urlretrieve(artist_url, artist_name + "_AR.png")
+  
+    img = Image.open(artist_name + "_AR.png")
+
+    #Get Dominant Color from spotify's artist picture
+
+    color_thief = ColorThief(artist_name + "_AR.png")
+    dominant_color = color_thief.get_color(quality=1)
+    print("Dominant color: ",type(dominant_color))
+
+    arr = np.asarray(dominant_color)
+    fla_color_arr = arr.flatten()
+    print(fla_color_arr)
+
+    
+
+    new = Image.new('RGB', (900,900), color=dominant_color)
+
+    new.paste(img,(550,30))
+
+    #d = ImageDraw.Draw(new)
+    #d.text((100, 100), artist_name, fill=(0,0,0))
+
+    draw = ImageDraw.Draw(new)
+    # use a bitmap font
+    font = ImageFont.truetype("Sora.ttf", 20)
+    draw.text((550, 360), artist_name, font=font, fill=(255,255,255))
+
+    new.show()
+
+
+
 def show_popularity(popularity):
     print()
     print("  POPULARITY RATING: ", popularity)
@@ -153,6 +209,8 @@ def show_popularity(popularity):
 
 def main():
     fetch_spotify_info()
+    isLightOrDark()
+    
     
 
 if __name__ == '__main__':
