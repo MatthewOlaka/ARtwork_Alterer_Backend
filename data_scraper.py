@@ -30,13 +30,13 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=CLIENT_ID,
                                                            client_secret=CLIENT_SECRET))
 
                                         
-def isLightOrDark(rgbColor=[175,203,211]):
+def isLightOrDark(rgbColor):
     [r,g,b]=rgbColor
     hsp = math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b))
     if (hsp>127.5):
-        print( 'light')
+        return 'light'
     else:
-        print( 'dark' )
+        return 'dark' 
 
 
 def get_args():
@@ -90,17 +90,22 @@ def fetch_spotify_info():
     #########   Getting artist info   ###############
 
     album_artist = result['albums']['items'][0]['artists'][0]['name']
-    result2 = sp.search(q='artist: ' + album_artist, type='artist', limit='1')
-    pprint.pprint(result2)
+    artist_uri = result['albums']['items'][0]['artists'][0]['uri']
+    #result2 = sp.search(q='artist: ' + album_artist, type='artist', limit='1')
+    #pprint.pprint(result)
 
     print("Artist Info")
     print()
 
-    artist_name = result2['artists']['items'][0]['name']
-    artist_img_url = result2['artists']['items'][0]['images'][1]['url']
+    artist_info = sp.artist(artist_uri)
+    pprint.pprint(artist_info)
 
-    print(result2['artists']['items'][0]['images'][1]['url'])
-    print(result2['artists']['items'][0]['name'])
+    #artist_name = result2['artists']['items'][0]['name']
+    #artist_img_url = result2['artists']['items'][0]['images'][1]['url']
+
+    artist_name = artist_info['name']
+    artist_img_url = artist_info['images'][1]['url']
+
 
 
     #########   Getting Album info   ###############
@@ -108,6 +113,7 @@ def fetch_spotify_info():
     ##  General info
 
     album_info = sp.album(album_uri)
+    
     #pprint.pprint(album_info)
     #pprint.pprint(album_info['tracks']['items'])
 
@@ -117,14 +123,24 @@ def fetch_spotify_info():
     print()
 
     print(album_info['name'])
+    album_name = album_info['name']
     print(album_info['album_type'])
+    project_type = album_info['album_type']
     print(album_info['label'])
+    label = album_info['label']
     print(album_info['release_date'])
+    release_date = album_info['release_date']
     print(album_info['total_tracks'])
+    total_tracks = album_info['total_tracks']
     print(album_info['popularity'])
     popularity = album_info['popularity']
+    print(album_info['duration_ms'])
+    duration = album_info['duration_ms']
+
    
     show_popularity(popularity)
+
+    #pprint.pprint(album_info)
     print()
     print()
 
@@ -151,9 +167,9 @@ def fetch_spotify_info():
     
     # Creating the Image
 
-    make_image(artist_name, artist_img_url)
+    make_image(artist_name, artist_img_url, album_name, label, project_type, release_date, total_tracks, duration)
 
-def make_image(artist_name, artist_url):
+def make_image(artist_name, artist_url, album_name, label, project_type, release_date, total_tracks, duration):
 
     #font = ImageFont.load("arial.pil")
 
@@ -165,11 +181,13 @@ def make_image(artist_name, artist_url):
 
     color_thief = ColorThief(artist_name + "_AR.png")
     dominant_color = color_thief.get_color(quality=1)
-    print("Dominant color: ",type(dominant_color))
+    print("Dominant color: ",dominant_color)
 
     arr = np.asarray(dominant_color)
     fla_color_arr = arr.flatten()
     print(fla_color_arr)
+
+    #isLightOrDark(fla_color_arr)
 
     
 
@@ -182,8 +200,47 @@ def make_image(artist_name, artist_url):
 
     draw = ImageDraw.Draw(new)
     # use a bitmap font
-    font = ImageFont.truetype("Sora.ttf", 20)
-    draw.text((550, 360), artist_name, font=font, fill=(255,255,255))
+    h3_font = ImageFont.truetype("Sora.ttf", 20)
+    title_font = ImageFont.truetype("Sora.ttf", 45)
+    #subtitle_font = ImageFont.truetype("Sora.ttf", 35)
+
+    if isLightOrDark(fla_color_arr) == 'dark':
+        
+        draw.text((550, 360), artist_name, font=h3_font, fill=(255,255,255))
+        draw.text((20, 30), album_name, font=title_font, fill=(255,255,255))
+        draw.text((20, 100), label, font=h3_font, fill=(255,255,255))
+        draw.text((20, 140), str(project_type).capitalize(), font=h3_font, fill=(255,255,255))
+        draw.text((100, 145), "°", font=h3_font, fill=(255,255,255))
+        draw.text((120, 140), release_date, font=h3_font, fill=(255,255,255))
+        if total_tracks > 1:
+            
+            draw.text((20, 180), str(total_tracks) + " tracks", font=h3_font, fill=(255,255,255))
+            draw.text((120, 185), "°", font=h3_font, fill=(255,255,255))
+            draw.text((150, 185), duration, font=h3_font, fill=(255,255,255))
+        else: 
+            draw.text((20, 180), str(total_tracks) + " track", font=h3_font, fill=(255,255,255))
+            draw.text((100, 185), "°", font=h3_font, fill=(255,255,255))
+            draw.text((150, 185), duration, font=h3_font, fill=(255,255,255))
+
+        
+    
+    else:
+
+        draw.text((550, 360), artist_name, font=h3_font, fill=(0,0,0))
+        draw.text((20, 30), album_name, font=title_font, fill=(0,0,0))
+        draw.text((20, 100), label, font=h3_font, fill=(0,0,0))
+        draw.text((20, 140), str(project_type).capitalize(), font=h3_font, fill=(0,0,0))
+        draw.text((100, 145), "°", font=h3_font, fill=(0,0,0))
+        draw.text((120, 140), release_date, font=h3_font, fill=(0,0,0))
+        if total_tracks > 1:
+            
+            draw.text((20, 180), str(total_tracks) + " tracks", font=h3_font, fill=(0,0,0))
+            draw.text((120, 185), "°", font=h3_font, fill=(0,0,0))
+            draw.text((150, 185), duration, font=h3_font, fill=(0,0,0))
+        else: 
+            draw.text((20, 180), str(total_tracks) + " track", font=h3_font, fill=(0,0,0))
+            draw.text((100, 185), "°", font=h3_font, fill=(0,0,0))
+            draw.text((150, 185), duration, font=h3_font, fill=(0,0,0))
 
     new.show()
 
@@ -209,7 +266,7 @@ def show_popularity(popularity):
 
 def main():
     fetch_spotify_info()
-    isLightOrDark()
+    #isLightOrDark()
     
     
 
