@@ -134,8 +134,8 @@ def fetch_spotify_info():
     total_tracks = album_info['total_tracks']
     print(album_info['popularity'])
     popularity = album_info['popularity']
-    print(album_info['duration_ms'])
-    duration = album_info['duration_ms']
+    #print(album_info['duration_ms'])
+    #duration = album_info['duration_ms']
 
    
     show_popularity(popularity)
@@ -167,15 +167,18 @@ def fetch_spotify_info():
     
     # Creating the Image
 
-    make_image(artist_name, artist_img_url, album_name, label, project_type, release_date, total_tracks, duration)
+    make_image(artist_name, artist_img_url, album_name, label, project_type, release_date, total_tracks, popularity)
 
-def make_image(artist_name, artist_url, album_name, label, project_type, release_date, total_tracks, duration):
+def make_image(artist_name, artist_url, album_name, label, project_type, release_date, total_tracks, popularity):
 
     #font = ImageFont.load("arial.pil")
 
     urllib.request.urlretrieve(artist_url, artist_name + "_AR.png")
   
     img = Image.open(artist_name + "_AR.png")
+    star = Image.open('images/star2.png')
+
+    empty_star = Image.open('images/emptystar.png')
 
     #Get Dominant Color from spotify's artist picture
 
@@ -200,9 +203,10 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
 
     draw = ImageDraw.Draw(new)
     # use a bitmap font
-    h3_font = ImageFont.truetype("Sora.ttf", 20)
+    
     title_font = ImageFont.truetype("Sora.ttf", 45)
-    #subtitle_font = ImageFont.truetype("Sora.ttf", 35)
+    h2_font = ImageFont.truetype("Sora.ttf", 35)
+    h3_font = ImageFont.truetype("Sora.ttf", 20)
 
     if isLightOrDark(fla_color_arr) == 'dark':
         
@@ -216,11 +220,44 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
             
             draw.text((20, 180), str(total_tracks) + " tracks", font=h3_font, fill=(255,255,255))
             draw.text((120, 185), "°", font=h3_font, fill=(255,255,255))
-            draw.text((150, 185), duration, font=h3_font, fill=(255,255,255))
+            #draw.text((150, 185), duration, font=h3_font, fill=(255,255,255))
         else: 
             draw.text((20, 180), str(total_tracks) + " track", font=h3_font, fill=(255,255,255))
             draw.text((100, 185), "°", font=h3_font, fill=(255,255,255))
-            draw.text((150, 185), duration, font=h3_font, fill=(255,255,255))
+            #draw.text((150, 185), duration, font=h3_font, fill=(255,255,255))
+
+        draw.text((120, 210), "Popularity Rating:", font=h2_font, fill=(255,255,255))
+
+        if show_popularity(popularity) == '1':
+            new.paste(star,(20, 270), mask=star)
+            new.paste(empty_star,(120, 270), mask=empty_star)
+            new.paste(empty_star,(220, 270), mask=empty_star)
+            new.paste(empty_star,(320, 270), mask=empty_star)
+            new.paste(empty_star,(420, 270), mask=empty_star)
+        elif show_popularity(popularity) == '2':
+            new.paste(star,(20, 270), mask=star)
+            new.paste(star,(120, 270), mask=star)
+            new.paste(empty_star,(220, 270), mask=empty_star)
+            new.paste(empty_star,(320, 270), mask=empty_star)
+            new.paste(empty_star,(420, 270), mask=empty_star)
+        elif show_popularity(popularity) == '3':
+            new.paste(star,(20, 270), mask=star)
+            new.paste(star,(120, 270), mask=star)
+            new.paste(star,(220, 270), mask=star)
+            new.paste(empty_star,(320, 270), mask=empty_star)
+            new.paste(empty_star,(420, 270), mask=empty_star)
+        elif show_popularity(popularity) == '4':
+            new.paste(star,(20, 270), mask=star)
+            new.paste(star,(120, 270), mask=star)
+            new.paste(star,(220, 270), mask=star)
+            new.paste(star,(320, 270), mask=star)
+            new.paste(empty_star,(420, 270), mask=empty_star)
+        elif show_popularity(popularity) == '5':
+            new.paste(star,(20, 270), mask=star)
+            new.paste(star,(120, 270), mask=star)
+            new.paste(star,(220, 270), mask=star)
+            new.paste(star,(320, 270), mask=star)
+            new.paste(star,(420, 270), mask=star)
 
         
     
@@ -236,11 +273,47 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
             
             draw.text((20, 180), str(total_tracks) + " tracks", font=h3_font, fill=(0,0,0))
             draw.text((120, 185), "°", font=h3_font, fill=(0,0,0))
-            draw.text((150, 185), duration, font=h3_font, fill=(0,0,0))
+            #draw.text((150, 185), duration, font=h3_font, fill=(0,0,0))
         else: 
             draw.text((20, 180), str(total_tracks) + " track", font=h3_font, fill=(0,0,0))
             draw.text((100, 185), "°", font=h3_font, fill=(0,0,0))
-            draw.text((150, 185), duration, font=h3_font, fill=(0,0,0))
+            #draw.text((150, 185), duration, font=h3_font, fill=(0,0,0))
+
+        draw.text((100, 210), "Popularity Rating:", font=h2_font, fill=(0,0,0))
+
+        if show_popularity(popularity) == '1':
+            new.paste(star,(20, 270), mask=star)
+            new.paste(empty_star,(120, 270), mask=empty_star)
+            new.paste(empty_star,(220, 270), mask=empty_star)
+            new.paste(empty_star,(320, 270), mask=empty_star)
+            new.paste(empty_star,(420, 270), mask=empty_star)
+        elif show_popularity(popularity) == '2':
+            new.paste(star,(20, 270), mask=star)
+            new.paste(star,(120, 270), mask=star)
+            new.paste(empty_star,(220, 270), mask=empty_star)
+            new.paste(empty_star,(320, 270), mask=empty_star)
+            new.paste(empty_star,(420, 270), mask=empty_star)
+        elif show_popularity(popularity) == '3':
+            new.paste(star,(20, 270), mask=star)
+            new.paste(star,(120, 270), mask=star)
+            new.paste(star,(220, 270), mask=star)
+            new.paste(empty_star,(320, 270), mask=empty_star)
+            new.paste(empty_star,(420, 270), mask=empty_star)
+        elif show_popularity(popularity) == '4':
+            new.paste(star,(20, 270), mask=star)
+            new.paste(star,(120, 270), mask=star)
+            new.paste(star,(220, 270), mask=star)
+            new.paste(star,(320, 270), mask=star)
+            new.paste(empty_star,(420, 270), mask=empty_star)
+        elif show_popularity(popularity) == '5':
+            new.paste(star,(20, 270), mask=star)
+            new.paste(star,(120, 270), mask=star)
+            new.paste(star,(220, 270), mask=star)
+            new.paste(star,(320, 270), mask=star)
+            new.paste(star,(420, 270), mask=star)
+
+        
+
 
     new.show()
 
@@ -250,17 +323,23 @@ def show_popularity(popularity):
     print()
     print("  POPULARITY RATING: ", popularity)
     print()
-    if popularity < 20:
+    if popularity < 16:
         print("*")
-    elif popularity > 19 and popularity < 40:
+        return '1'
+    elif popularity > 15 and popularity < 32:
         print("* *")
-    elif popularity > 39 and popularity < 60:
+        return '2'
+    elif popularity > 31 and popularity < 48:
         print("* * *")
-    elif popularity > 59 and popularity < 80:
+        return '3'
+    elif popularity > 47 and popularity < 64:
         print("* * * *")
-    elif popularity > 79 and popularity < 100:
+        return '4'
+    elif popularity > 64:
         print("* * * * *")
+        return '5'
     
+
         
 
 
