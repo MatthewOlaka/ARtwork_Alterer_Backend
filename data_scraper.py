@@ -18,6 +18,12 @@ import urllib.request
 
 load_dotenv()
 
+''' tracks_dict = dict()
+track_artist_dict = dict() '''
+tracks_dict = {}
+track_artist_dict = {}
+
+
 CLIENT_ID = os.getenv('CLIENT_ID') 
 CLIENT_SECRET = os.getenv('CLIENT_SECRET')
 
@@ -156,18 +162,28 @@ def fetch_spotify_info():
         
         print("Track Number: ", i['track_number'])
         print("Track Name: ", i['name'])
+        tracks_dict[i['track_number']] = i['name']
+
+        artist_arr = []
         
         for j in album_info['tracks']['items'][m]['artists']:
             print("artists involved:", j['name'])
+            artist_arr.append(j['name'])
+            track_artist_dict[i['track_number']] = artist_arr
             
         #print("artists involved:", i['artists'][0]['name'])
         print()
         m+=1
+    
+    print("yeye$%$#@#$%$#$%$#$%$#$")
+    print(tracks_dict)
+    print(track_artist_dict)
+    print("yeye$%$#@#$%$#$%$#$%$#$")
 
     
     # Creating the Image
 
-    make_image(artist_name, artist_img_url, album_name, label, project_type, release_date, total_tracks, popularity)
+    #make_image(artist_name, artist_img_url, album_name, label, project_type, release_date, total_tracks, popularity)
 
 def make_image(artist_name, artist_url, album_name, label, project_type, release_date, total_tracks, popularity):
 
