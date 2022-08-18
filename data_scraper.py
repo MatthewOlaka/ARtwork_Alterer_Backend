@@ -177,13 +177,14 @@ def fetch_spotify_info():
     
     print("yeye$%$#@#$%$#$%$#$%$#$")
     print(tracks_dict)
+    print()
     print(track_artist_dict)
     print("yeye$%$#@#$%$#$%$#$%$#$")
 
     
     # Creating the Image
 
-    #make_image(artist_name, artist_img_url, album_name, label, project_type, release_date, total_tracks, popularity)
+    make_image(artist_name, artist_img_url, album_name, label, project_type, release_date, total_tracks, popularity)
 
 def make_image(artist_name, artist_url, album_name, label, project_type, release_date, total_tracks, popularity):
 
@@ -223,6 +224,11 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
     title_font = ImageFont.truetype("Sora.ttf", 45)
     h2_font = ImageFont.truetype("Sora.ttf", 35)
     h3_font = ImageFont.truetype("Sora.ttf", 20)
+    track_font = ImageFont.truetype("Sora.ttf", 25)
+    feature_font = ImageFont.truetype("Sora.ttf", 15)
+    row_space1 = 0
+    row_space2 = 0
+
 
     if isLightOrDark(fla_color_arr) == 'dark':
         
@@ -274,6 +280,21 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
             new.paste(star,(220, 270), mask=star)
             new.paste(star,(320, 270), mask=star)
             new.paste(star,(420, 270), mask=star)
+    
+        for key, value in tracks_dict.items():
+            draw.text((300, 420 + row_space1), str(key) + ".", font=h3_font, fill=(255,255,255))
+            draw.text((330, 418 + row_space1), value, font=track_font, fill=(255,255,255))
+            row_space1 += 70
+        
+        for key, value in track_artist_dict.items():
+            for i in value:
+                draw.text((330, 440 + row_space2), str(value), font=feature_font, fill=(255,255,255))
+            row_space2 += 70
+        
+        
+        
+
+
 
         
     
@@ -327,6 +348,19 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
             new.paste(star,(220, 270), mask=star)
             new.paste(star,(320, 270), mask=star)
             new.paste(star,(420, 270), mask=star)
+    
+        for key, value in tracks_dict.items():
+            draw.text((300, 420 + row_space1), str(key) + ".", font=h3_font, fill=(0,0,0))
+            draw.text((330, 418 + row_space1), value, font=track_font, fill=(0,0,0))
+            row_space1 += 70
+        
+        for key, value in track_artist_dict.items():
+            feature_space = 0
+            for i in value:
+                draw.text((330 + feature_space, 450 + row_space2), str(i), font=feature_font, fill=(0,0,0))
+                feature_space += len(str(i)) + 50
+            row_space2 += 70
+        
 
         
 
