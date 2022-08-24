@@ -229,6 +229,10 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
     row_space1 = 0
     row_space2 = 0
 
+    #column 2
+    row_space3 = 0
+    row_space4 = 0
+
 
     if isLightOrDark(fla_color_arr) == 'dark':
         
@@ -281,7 +285,7 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
             new.paste(star,(320, 270), mask=star)
             new.paste(star,(420, 270), mask=star)
     
-        for key, value in tracks_dict.items():
+        ''' for key, value in tracks_dict.items():
             draw.text((300, 420 + row_space1), str(key) + ".", font=h3_font, fill=(255,255,255))
             draw.text((330, 418 + row_space1), value, font=track_font, fill=(255,255,255))
             row_space1 += 70
@@ -289,7 +293,58 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
         for key, value in track_artist_dict.items():
             for i in value:
                 draw.text((330, 440 + row_space2), str(value), font=feature_font, fill=(255,255,255))
-            row_space2 += 70
+            row_space2 += 70 '''
+
+        
+        for key, value in tracks_dict.items():
+            if key < 8 :
+                draw.text((30, 420 + row_space1), str(key) + ".", font=h3_font, fill=(255,255,255))
+                draw.text((60, 418 + row_space1), value, font=track_font, fill=(255,255,255))
+            elif key > 7 and key < 15 and total_tracks < 15:
+                draw.text((430, 420 + row_space3), str(key) + ".", font=h3_font, fill=(255,255,255))
+                draw.text((460, 418 + row_space3), value, font=track_font, fill=(255,255,255))
+                row_space3 += 70
+            elif key > 7 and key < 15 and total_tracks > 14:
+                if key == 14: 
+                    draw.text((430, 420 + row_space3), " + " + str(total_tracks - 14) + " more tracks...", font=track_font, fill=(255,255,255))
+                else:
+                    draw.text((430, 420 + row_space3), str(key) + ".", font=h3_font, fill=(255,255,255))
+                    draw.text((460, 418 + row_space3), value, font=track_font, fill=(255,255,255))
+                row_space3 += 70
+            row_space1 += 70
+        
+        for key, value in track_artist_dict.items():
+            
+            if key < 8 :
+                feature_space = 60
+                for i in value:
+                    draw.text((feature_space, 450 + row_space2), str(i), font=feature_font, fill=(255,255,255))
+                    #print(i + "=" + str(feature_space) )
+                    #feature_space += int(len(str(i)) + 110)
+                    feature_space += int(len(str(i)) + 7*int(len(str(i))) + 10)
+                    
+                row_space2 += 70
+            
+            elif key > 7 and key < 15 and total_tracks < 15:
+                feature_space = 460
+                for i in value:
+                    draw.text((feature_space, 450 + row_space4), str(i), font=feature_font, fill=(255,255,255))
+                    print(i + "=" + str(feature_space) )
+                    feature_space += int(len(str(i)) + 7*int(len(str(i))) + 10)
+                    
+                row_space4 += 70
+            
+            elif key > 7 and key < 15 and total_tracks > 14:
+                feature_space = 460
+                for i in value:
+                    if key < 14:
+                        draw.text((feature_space, 450 + row_space4), str(i), font=feature_font, fill=(255,255,255))
+                        print(i + "=" + str(feature_space) )
+                        feature_space += int(len(str(i)) + 7*int(len(str(i))) + 10)
+                    else: 
+                        draw.text((500, 450 + row_space4), "", font=feature_font, fill=(255,255,255))
+                    
+                row_space4 += 70
         
         
         
@@ -348,8 +403,10 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
             new.paste(star,(220, 270), mask=star)
             new.paste(star,(320, 270), mask=star)
             new.paste(star,(420, 270), mask=star)
-    
-        for key, value in tracks_dict.items():
+        
+
+        
+        ''' for key, value in tracks_dict.items():
             draw.text((300, 420 + row_space1), str(key) + ".", font=h3_font, fill=(0,0,0))
             draw.text((330, 418 + row_space1), value, font=track_font, fill=(0,0,0))
             row_space1 += 70
@@ -359,7 +416,57 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
             for i in value:
                 draw.text((330 + feature_space, 450 + row_space2), str(i), font=feature_font, fill=(0,0,0))
                 feature_space += len(str(i)) + 50
-            row_space2 += 70
+            row_space2 += 70 '''
+        
+        for key, value in tracks_dict.items():
+            if key < 8 :
+                draw.text((30, 420 + row_space1), str(key) + ".", font=h3_font, fill=(0,0,0))
+                draw.text((60, 418 + row_space1), value, font=track_font, fill=(0,0,0))
+            elif key > 7 and key < 15 and total_tracks < 15:
+                draw.text((430, 420 + row_space3), str(key) + ".", font=h3_font, fill=(0,0,0))
+                draw.text((460, 418 + row_space3), value, font=track_font, fill=(0,0,0))
+                row_space3 += 70
+            elif key > 7 and key < 15 and total_tracks > 14:
+                if key == 14: 
+                    draw.text((430, 420 + row_space3), " + " + str(total_tracks - 14) + " more tracks...", font=track_font, fill=(0,0,0))
+                else:
+                    draw.text((430, 420 + row_space3), str(key) + ".", font=h3_font, fill=(0,0,0))
+                    draw.text((460, 418 + row_space3), value, font=track_font, fill=(0,0,0))
+                row_space3 += 70
+            row_space1 += 70
+        
+        for key, value in track_artist_dict.items():
+            
+            if key < 8 :
+                feature_space = 60
+                for i in value:
+                    draw.text((feature_space, 450 + row_space2), str(i), font=feature_font, fill=(0,0,0))
+                    #print(i + "=" + str(feature_space) )
+                    #feature_space += int(len(str(i)) + 110)
+                    feature_space += int(len(str(i)) + 7*int(len(str(i))) + 10)
+                    
+                row_space2 += 70
+            
+            elif key > 7 and key < 15 and total_tracks < 15:
+                feature_space = 460
+                for i in value:
+                    draw.text((feature_space, 450 + row_space4), str(i), font=feature_font, fill=(0,0,0))
+                    print(i + "=" + str(feature_space) )
+                    feature_space += int(len(str(i)) + 7*int(len(str(i))) + 10)
+                    
+                row_space4 += 70
+            
+            elif key > 7 and key < 15 and total_tracks > 14:
+                feature_space = 460
+                for i in value:
+                    if key < 14:
+                        draw.text((feature_space, 450 + row_space4), str(i), font=feature_font, fill=(0,0,0))
+                        print(i + "=" + str(feature_space) )
+                        feature_space += int(len(str(i)) + 7*int(len(str(i))) + 10)
+                    else: 
+                        draw.text((500, 450 + row_space4), "", font=feature_font, fill=(0,0,0))
+                    
+                row_space4 += 70
         
 
         
