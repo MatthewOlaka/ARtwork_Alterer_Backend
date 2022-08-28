@@ -299,7 +299,10 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
         for key, value in tracks_dict.items():
             if key < 8 :
                 draw.text((30, 420 + row_space1), str(key) + ".", font=h3_font, fill=(255,255,255))
-                draw.text((60, 418 + row_space1), value, font=track_font, fill=(255,255,255))
+                if len(value) < 30:
+                    draw.text((60, 418 + row_space1), value, font=track_font, fill=(255,255,255))
+                else: 
+                    draw.text((60, 418 + row_space1), value[0:26] + "...", font=track_font, fill=(255,255,255))
             elif key > 7 and key < 15 and total_tracks < 15:
                 draw.text((430, 420 + row_space3), str(key) + ".", font=h3_font, fill=(255,255,255))
                 draw.text((460, 418 + row_space3), value, font=track_font, fill=(255,255,255))
@@ -421,7 +424,11 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
         for key, value in tracks_dict.items():
             if key < 8 :
                 draw.text((30, 420 + row_space1), str(key) + ".", font=h3_font, fill=(0,0,0))
-                draw.text((60, 418 + row_space1), value, font=track_font, fill=(0,0,0))
+                if len(value) < 30:
+                    draw.text((60, 418 + row_space1), value, font=track_font, fill=(0,0,0))
+                else: 
+                    draw.text((60, 418 + row_space1), value[0:26] + "...", font=track_font, fill=(0,0,0))
+                #print(value + " = " + str(len(value)))
             elif key > 7 and key < 15 and total_tracks < 15:
                 draw.text((430, 420 + row_space3), str(key) + ".", font=h3_font, fill=(0,0,0))
                 draw.text((460, 418 + row_space3), value, font=track_font, fill=(0,0,0))
@@ -451,7 +458,7 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
                 feature_space = 460
                 for i in value:
                     draw.text((feature_space, 450 + row_space4), str(i), font=feature_font, fill=(0,0,0))
-                    print(i + "=" + str(feature_space) )
+                    print(i + " = " + str(feature_space) )
                     feature_space += int(len(str(i)) + 7*int(len(str(i))) + 10)
                     
                 row_space4 += 70
