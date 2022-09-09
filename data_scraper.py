@@ -97,8 +97,10 @@ def fetch_spotify_info():
 
     album_artist = result['albums']['items'][0]['artists'][0]['name']
     artist_uri = result['albums']['items'][0]['artists'][0]['uri']
+    reference_artwork = result['albums']['items'][0]['images'][0]['url']
     #result2 = sp.search(q='artist: ' + album_artist, type='artist', limit='1')
-    #pprint.pprint(result)
+    pprint.pprint(result)
+
 
     print("Artist Info")
     print()
@@ -184,15 +186,19 @@ def fetch_spotify_info():
     
     # Creating the Image
 
-    make_image(artist_name, artist_img_url, album_name, label, project_type, release_date, total_tracks, popularity)
+    make_image(artist_name, artist_img_url, album_name, label, project_type, release_date, total_tracks, popularity, reference_artwork)
 
-def make_image(artist_name, artist_url, album_name, label, project_type, release_date, total_tracks, popularity):
+def make_image(artist_name, artist_url, album_name, label, project_type, release_date, total_tracks, popularity, reference_artwork):
 
     #font = ImageFont.load("arial.pil")
 
+
     urllib.request.urlretrieve(artist_url, artist_name + "_AR.png")
+
+    urllib.request.urlretrieve(reference_artwork, album_name + "__Reference.png")
   
     img = Image.open(artist_name + "_AR.png")
+    #img2 =  Image.open(album_name + "_AR.png")
     star = Image.open('images/star2.png')
 
     empty_star = Image.open('images/emptystar.png')
@@ -210,8 +216,10 @@ def make_image(artist_name, artist_url, album_name, label, project_type, release
     #isLightOrDark(fla_color_arr)
 
     
-
+    
     new = Image.new('RGB', (900,900), color=dominant_color)
+
+    #new2 = Image.new('RGB', (900,900), color=dominant_color)
 
     new.paste(img,(550,30))
 
