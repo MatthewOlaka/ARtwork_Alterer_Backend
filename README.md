@@ -3,7 +3,7 @@ This is the backend that makes calls to the Spotify API and gets information abo
 
 This backend is used as a dataminer that finds and extracts relevant information about an artist's album and displays a new album art that showcases this infomation. 
 
-You may view the code on datascraper.py file.
+You may view the code on data_scraper.py file.
 
 For more information contact matthew.olaka0@gmail.com
 Thank you for your interest in ARtwork Alterer.
